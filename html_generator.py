@@ -1381,7 +1381,12 @@ body {
                         
                         if local_path:
                             # URL-encode filename (spaces → %20, etc.) but keep '/' safe
-                            safe_filename = quote(local_path.name, safe='')
+                            # Handle potential surrogate errors in filename
+                            try:
+                                safe_filename = quote(local_path.name, safe='')
+                            except (UnicodeEncodeError, UnicodeDecodeError):
+                                # If filename has encoding issues, use URL-safe version
+                                safe_filename = quote(str(local_path.name).encode('utf-8', errors='ignore').decode('utf-8'), safe='')
                             link['href'] = f"downloads/{safe_filename}"
                             # Only count if actually downloaded (not cached)
                             if was_downloaded:
