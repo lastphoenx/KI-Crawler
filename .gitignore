@@ -1,0 +1,39 @@
+# Virtual Environment
+venv/
+env/
+.venv
+ENV/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Runtime Data
+cache/
+logs/
+output/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Config (if using local overrides)
+config.local.yaml
+.env.local
+_archive/
+verify_git_readiness.sh

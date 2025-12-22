@@ -1,0 +1,381 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    
+    {% if css_files %}
+    <!-- Enhanced CSS Styling -->
+    {% for css_file in css_files %}
+    <link rel="stylesheet" href="assets/{{ css_file }}">
+    {% endfor %}
+    {% endif %}
+    
+    {% if fallback_css %}
+    <!-- Fallback CSS -->
+    <link rel="stylesheet" href="assets/fallback.css">
+    {% endif %}
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .sidebar {
+            width: 300px;
+            background: #f8f9fa;
+            border-right: 1px solid #dee2e6;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+        
+        .sidebar h2 {
+            padding: 0 20px 15px;
+            font-size: 1.2rem;
+            color: #212529;
+            border-bottom: 2px solid #dee2e6;
+            margin-bottom: 10px;
+        }
+        
+        .nav-list {
+            list-style: none;
+        }
+        
+        .nav-tree {
+            list-style: none;
+        }
+        
+        .nav-tree ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .tree-folder {
+            margin: 0;
+        }
+        
+        .tree-toggle {
+            display: flex;
+            align-items: center;
+            padding: 8px 20px;
+            cursor: pointer;
+            user-select: none;
+            color: #495057;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        
+        .tree-toggle:hover {
+            background: #e9ecef;
+        }
+        
+        .tree-toggle::before {
+            content: '▶';
+            display: inline-block;
+            width: 14px;
+            margin-right: 8px;
+            transition: transform 0.2s;
+            font-size: 0.7rem;
+        }
+        
+        .tree-folder.expanded > .tree-toggle::before {
+            transform: rotate(90deg);
+        }
+        
+        .tree-children {
+            display: none;
+            padding-left: 20px;
+        }
+        
+        .tree-folder.expanded > .tree-children {
+            display: block;
+        }
+        
+        .nav-category {
+            padding: 12px 20px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 15px;
+            background: #e9ecef;
+        }
+        
+        .nav-category:first-child {
+            margin-top: 0;
+        }
+        
+        .nav-item {
+            padding: 0;
+            list-style: none;
+        }
+        
+        .nav-item a {
+            display: block;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            color: #495057;
+            text-decoration: none;
+        }
+        
+        .nav-item a:hover {
+            background: #e9ecef;
+            border-left-color: #6c757d;
+        }
+        
+        .nav-item.active a {
+            background: #007bff;
+            color: white;
+            border-left-color: #0056b3;
+            font-weight: 500;
+        }
+        
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+            background: white;
+        }
+        
+        .page-content {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .page-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+            color: #212529;
+            margin-bottom: 10px;
+        }
+        
+        .page-url {
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-family: monospace;
+        }
+        
+        /* Content styling */
+        .page-body h1, .page-body h2, .page-body h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: #212529;
+        }
+        
+        .page-body p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: #495057;
+        }
+        
+        .page-body ul, .page-body ol {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+        }
+        
+        .page-body li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        
+        .page-body pre {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        
+        .page-body code {
+            background: #f8f9fa;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .page-body a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .page-body a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <h2>{{ site_title }}</h2>
+        <ul class="nav-tree">
+            {% set ns = namespace(first=true) %}
+            
+            {# Recursive macro for tree rendering #}
+            {% macro render_tree(nodes, level=0) %}
+                {% for node in nodes %}
+                    {# If node has only 1 page and no children, render page directly (no folder wrapper) #}
+                    {% if node.pages|length == 1 and not node.children %}
+                        {% set page = node.pages[0] %}
+                        <li class="nav-item {% if ns.first %}active{% endif %}" data-page="{{ page.id }}">
+                            <a href="#{{ page.id }}">{{ page.title }}</a>
+                        </li>
+                        {% set ns.first = false %}
+                    {% elif node.children or node.pages %}
+                        {# Render as folder if multiple pages or has subfolders #}
+                        <li class="tree-folder {% if level == 0 %}expanded{% endif %}">
+                            {% if node.children %}
+                                <div class="tree-toggle">{{ node.name }}</div>
+                                <ul class="tree-children">
+                                    {# Render child folders #}
+                                    {{ render_tree(node.children, level + 1) }}
+                                    {# Render pages in this folder #}
+                                    {% for page in node.pages %}
+                                        <li class="nav-item {% if ns.first %}active{% endif %}" data-page="{{ page.id }}">
+                                            <a href="#{{ page.id }}">{{ page.title }}</a>
+                                        </li>
+                                        {% set ns.first = false %}
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                {# Folder with only pages (no subfolders) #}
+                                <div class="tree-toggle">{{ node.name }}</div>
+                                <ul class="tree-children">
+                                    {% for page in node.pages %}
+                                        <li class="nav-item {% if ns.first %}active{% endif %}" data-page="{{ page.id }}">
+                                            <a href="#{{ page.id }}">{{ page.title }}</a>
+                                        </li>
+                                        {% set ns.first = false %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            {% endmacro %}
+            
+            {{ render_tree(nav_tree) }}
+        </ul>
+    </aside>
+    
+    <main class="main-content">
+        {% set ns = namespace(first=true) %}
+        {# Render all pages (flatten tree for content display) #}
+        {% macro render_pages(nodes) %}
+            {% for node in nodes %}
+                {% for page in node.pages %}
+                <div class="page-content {% if ns.first %}active{% endif %}" 
+                     id="{{ page.id }}">
+                    <div class="page-header">
+                        <h1 class="page-title">{{ page.title }}</h1>
+                        <div class="page-url">{{ page.url }}</div>
+                    </div>
+                    <div class="page-body">
+                        {{ page.content|safe }}
+                    </div>
+                </div>
+                {% set ns.first = false %}
+                {% endfor %}
+                {% if node.children %}
+                    {{ render_pages(node.children) }}
+                {% endif %}
+            {% endfor %}
+        {% endmacro %}
+        
+        {{ render_pages(nav_tree) }}
+        {{ render_pages(nav_tree) }}
+    </main>
+    
+    <script>
+        const DEFAULT_PAGE_ID = '{{ first_page_id or "" }}';
+        
+        // Toggle tree folders
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.tree-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const folder = this.parentElement;
+                    folder.classList.toggle('expanded');
+                });
+            });
+        });
+        
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+            }
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            const selectedNav = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+            if (selectedNav) {
+                selectedNav.classList.add('active');
+                selectedNav.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+        
+        function showPageFromHash() {
+            let pageId = window.location.hash.substring(1);
+            
+            // Kein Hash -> Startseite
+            if (!pageId) {
+                pageId = DEFAULT_PAGE_ID;
+            }
+            
+            // Ungültiger Hash -> Fallback zur Startseite
+            if (!document.getElementById(pageId)) {
+                pageId = DEFAULT_PAGE_ID;
+            }
+            
+            if (pageId) {
+                showPage(pageId);
+            }
+        }
+        
+        // Beim ersten Laden: Hash auswerten
+        window.addEventListener('DOMContentLoaded', showPageFromHash);
+        
+        // Bei Back/Forward & Hash-Änderungen: Seite aktualisieren
+        window.addEventListener('hashchange', showPageFromHash);
+    </script>
+</body>
+</html>

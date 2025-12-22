@@ -1,0 +1,46 @@
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info
+dist
+build
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Testing & Debug
+test_*.py
+debug_*.py
+check_*.py
+analyze_*.py
+verify_*.py
+*_test.py
+
+# Logs & Cache
+*.log
+cache/
+.cache/
+
+# Documentation (except README)
+*.md
+!README.md
+
+# Data files
+output/
+*.docx
+*.xlsx
+*.csv
+webseiten-crawler.docx
+
+# OS
+.DS_Store
+Thumbs.db
+.env
+.env.local
