@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  ki-crawler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ki-crawler
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./output:/app/output
+      - ./cache:/app/cache
+      - ./config.yaml:/app/config.yaml
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TZ=UTC
+    restart: unless-stopped
+    networks:
+      - ki-crawler-net
+
+networks:
+  ki-crawler-net:
+    driver: bridge

@@ -1,0 +1,28 @@
+# Core dependencies for web crawling
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=5.0.0
+
+# Document generation
+python-docx>=1.1.0
+pyyaml>=6.0.2
+
+# Image handling
+Pillow>=10.1.0
+
+# Code highlighting & display
+pygments==2.17.2
+
+# System monitoring
+psutil==5.9.6
+
+# Async HTTP (for concurrent requests)
+aiohttp>=3.9.0
+
+# Web UI Framework
+nicegui>=1.4.0
+fastapi>=0.104.0
+uvicorn>=0.24.0
+
+# JavaScript rendering (for SPA/dynamic sites)
+playwright>=1.40.0

@@ -1,0 +1,76 @@
+crawler:
+  entry_url: "https://docs.pcloud.com/"
+  max_retries: 3
+  retry_backoff_factor: 2
+  timeout_seconds: 10
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  
+  # URL Scope Control (Advanced Filtering)
+  # =======================================
+  # Controls which URLs are allowed during crawling to prevent scope creep
+  
+  strict_base_path: true       # Only crawl URLs under entry URL's path (recommended)
+                               # Example: entry=/docs/api/ → only /docs/api/* allowed
+  
+  parent_levels: 0             # Go N levels up from entry URL (0=strict, 1+=parent dir)
+                               # Example: entry=/docs/api/, parent_levels=1 → base=/docs/ → allows /docs/*
+                               # WARNING: Allows sibling paths! Use url_must_not_contain for exclusions
+  
+  url_must_contain: []         # URLs must contain at least one pattern (OR logic)
+                               # Example: ["module", "api"] → URL must have "module" OR "api"
+  
+  url_must_not_contain: []     # URLs must NOT contain any pattern (AND logic)
+                               # Example: ["/admin", "/private"] → blocks both patterns
+  
+  javascript_rendering:
+    enabled: true                 # Set to true to enable Playwright for SPAs
+    headless: true               # Run browser headless
+    timeout: 30000               # Navigation timeout in ms
+    auto_detect: true            # Auto-detect SPAs and render with JS
+  
+parser:
+  content_selectors:
+    - "div.dev-content"
+    - "main"
+    - "article"
+  title_selectors:
+    - "h1"
+    - ".page-title"
+  code_block_selector: "pre code"
+  table_selector: "table"
+  note_box_selector: ".note, [class*='warning'], [class*='info'], [style*='background-color: rgb(255, 255, 200)']"
+
+document:
+  title: "API Documentation"
+  author: "Documentation Crawler"
+  template: "standard"  # Options: standard, developer, compact
+  include_toc: true
+  include_error_log: true
+  
+  # Content filtering
+  min_content_length: 20  # Minimum text length to keep page (0=disable filtering)
+  
+  listing_filter:
+    include_listing_pages: false
+    force_include_patterns:
+      - ".*/methods/intro/.*"
+      - ".*/methods/.*"
+      - ".*/structures/.*"
+      - ".*quick.*reference.*"
+      - ".*glossary.*"
+    force_exclude_patterns:
+      - ".*/404.*"
+      - ".*/search.*"
+      - ".*/contact.*"
+      - ".*/my_apps.*"
+
+output:
+  docx_filename: "documentation.docx"
+  pdf_filename: "documentation.pdf"
+  cache_dir: "./cache"
+  output_dir: "./output"
+  
+  # Standalone HTML generation (Option B: Inline all assets as Base64)
+  inline_standalone: false      # Set to true to generate index-standalone.html with all assets inlined
+                                # This creates a single-file offline-compatible version
+                                # Trade-off: Larger file size but no external dependencies
