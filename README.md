@@ -28,6 +28,34 @@ Ein intelligentes **Web-Crawling-System**, das HTML-Dokumentationen vollautomati
 
 ## Installation
 
+### 🚀 Option A: Automatisches Setup (empfohlen)
+
+```bash
+# Repository klonen
+git clone https://github.com/lastphoenx/KI-Crawler.git
+cd KI-Crawler
+
+# Setup-Script ausführen (installiert alles automatisch)
+chmod +x setup.sh
+./setup.sh
+```
+
+Das Script installiert automatisch:
+- ✅ System-Bibliotheken (Linux/WSL: libxml2, libxslt, etc.)
+- ✅ Python Virtual Environment
+- ✅ Alle Python-Dependencies aus requirements.txt
+- ✅ Playwright-Browser (Chromium ~280 MB für JavaScript-Rendering)
+
+Nach dem Setup:
+```bash
+source venv/bin/activate  # Virtual Environment aktivieren
+python main_ui.py         # Web-UI starten
+```
+
+---
+
+### 🔧 Option B: Manuelle Installation
+
 ### Voraussetzungen
 - **Python 3.10+** (getestet mit Python 3.13)
 - **pip** (Python Package Manager)
@@ -64,6 +92,9 @@ sudo apt install -y libxml2-dev libxslt1-dev python3-dev zlib1g-dev
 # Dann Python-Pakete
 pip install --upgrade pip
 pip install -r requirements.txt
+
+# Playwright-Browser installieren (für JavaScript-Rendering)
+playwright install chromium
 ```
 
 **macOS:**
@@ -74,6 +105,9 @@ brew install libxml2 libxslt
 # Python-Pakete
 pip install --upgrade pip
 pip install -r requirements.txt
+
+# Playwright-Browser installieren (für JavaScript-Rendering)
+playwright install chromium
 ```
 
 **Windows:**
@@ -81,6 +115,9 @@ pip install -r requirements.txt
 # Direkt installieren (keine System-Libs nötig)
 pip install --upgrade pip
 pip install -r requirements.txt
+
+# Playwright-Browser installieren (für JavaScript-Rendering)
+playwright install chromium
 ```
 
 ### Schritt 4: Konfiguration (Optional)

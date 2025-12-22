@@ -37,3 +37,6 @@ config.local.yaml
 .env.local
 _archive/
 verify_git_readiness.sh
+
+# Generated Templates (user-created custom templates)
+templates/custom_*.json
