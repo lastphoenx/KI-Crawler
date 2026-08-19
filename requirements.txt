@@ -11,7 +11,7 @@ pyyaml>=6.0.2
 Pillow>=10.1.0
 
 # Code highlighting & display
-pygments==2.17.2
+pygments==2.21.0
 
 # System monitoring
 psutil==5.9.6
