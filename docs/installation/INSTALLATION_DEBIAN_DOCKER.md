@@ -44,7 +44,7 @@ docker-compose --version
 **Schritt 1: Auf Windows - Diese Ordner/Dateien kopieren:**
 
 ```
-C:\Users\santinel\Documents\Apps\KI-Crawler\
+C:\Users\user\Documents\Apps\KI-Crawler\
 ├── app/                          ✅ KOPIEREN
 ├── components/                   ✅ KOPIEREN
 ├── models/                       ✅ KOPIEREN
@@ -102,7 +102,7 @@ run_full_crawl.py               ❌ Legacy-Skript (wir nutzen main_ui.py)
 **Option A: SCP (von Windows PowerShell oder WSL)**
 ```powershell
 # Alle Dateien mit SCP kopieren
-scp -r "C:\Users\santinel\Documents\Apps\KI-Crawler\*" debian_user@debian_ip:/home/debian_user/ki-crawler/
+scp -r "C:\Users\user\Documents\Apps\KI-Crawler\*" debian_user@debian_ip:/home/debian_user/ki-crawler/
 
 # Dann: Nur die folgenden Ordner beibehalten:
 # app/, components/, models/, pages/, services/, templates/
@@ -118,7 +118,7 @@ cd ~/ki-crawler
 ```
 
 2. Auf Windows: Kopiere manuell per SFTP-Client (z.B. WinSCP, Filezilla):
-   - Quelle: `C:\Users\santinel\Documents\Apps\KI-Crawler\`
+   - Quelle: `C:\Users\user\Documents\Apps\KI-Crawler\`
    - Ziel: `/home/debian_user/ki-crawler/`
 
 3. Dann auf Debian alle **nicht benötigten Dateien löschen**:
